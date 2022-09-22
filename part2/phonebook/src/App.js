@@ -33,7 +33,7 @@ const App = () => {
       <div>debug number: {newNumber}</div>
       <div>debug filter: {newFilter}</div>
       <h2>Numbers</h2>
-      <Persons persons={persons} newFilter={newFilter}/>
+      <Persons persons={persons} setPersons={setPersons} newFilter={newFilter}/>
     </div>
   )
 }
