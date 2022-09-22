@@ -2,7 +2,8 @@ import personsServer from '../services/PersonsServer.js'
 
 const PersonForm = ({newName, setNewName,
                      newNumber, setNewNumber,
-                     persons, setPersons}) => {
+                     persons, setPersons,
+                     setMessage}) => {
 
     const handleSubmit = (event) => {
         event.preventDefault()
@@ -27,6 +28,14 @@ const PersonForm = ({newName, setNewName,
                         setPersons(newPersons)
                         setNewName('')
                         setNewNumber('')
+                        setMessage('Changed ' + 
+                            `${newPersons[changedIndex].name}'s number to ` + 
+                            `${newPersons[changedIndex].number}`)
+                        setTimeout(() => setMessage(''), 5000)
+                    })
+                    .catch(error => {
+                        setMessage(`Error: ${updatePerson.name} has already been deleted`)
+                        setTimeout(() => setMessage(''), 5000)
                     })
             }
         }
@@ -37,6 +46,8 @@ const PersonForm = ({newName, setNewName,
                 setPersons(persons.concat(person))
                 setNewName('')
                 setNewNumber('')
+                setMessage(`Added ${person.name}`)
+                setTimeout(() => setMessage(''), 5000)
             })
         }
     }
