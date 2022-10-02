@@ -9,6 +9,8 @@ app.use(morgan(
     ':method :url :status :res[content-length] - :response-time ms :output'
 ))
 
+app.use(express.static('build'))
+
 let persons = 
 [
     { 
@@ -118,7 +120,11 @@ app.post('/api/persons', (response, request) => {
     response.res.json(person)
 })
 
-const PORT = 3001
+app.get('/api/persons', (response, request) => {
+    request.send(persons)
+})
+
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
