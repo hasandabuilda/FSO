@@ -1,6 +1,6 @@
-# fly.toml file generated for morning-cloud-879 on 2022-09-28T16:40:34-05:00
+# fly.toml file generated for dark-lake-1024 on 2022-10-03T13:14:45-05:00
 
-app = "morning-cloud-879"
+app = "dark-lake-1024"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
