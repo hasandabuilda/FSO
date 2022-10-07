@@ -12,8 +12,6 @@ app.use(morgan(
 ))
 
 app.get('/api/persons/:id', (response, request, next) => {
-    const id = Number(request.req.params.id)
-
     Person.findById(request.req.params.id)
         .then(person => {
             if (person) {
@@ -62,6 +60,7 @@ app.post('/api/persons', (response, request, next) => {
                 person.save().then(savedPerson => {
                     response.res.json(savedPerson)
                 })
+                .catch(error => next(error))
             }
             else {
                 return response.res.status(400).json({
@@ -73,7 +72,12 @@ app.post('/api/persons', (response, request, next) => {
 })
 
 app.put('/api/persons/:id', (response, request, next) => {
-    Person.findByIdAndUpdate(request.req.params.id, request.req.body, { new: true })
+    const {name, number} = request.req.body
+    
+    Person.findByIdAndUpdate(
+        request.req.params.id,
+        {name, number},
+        { new: true, runValidators: true, context: 'query' })
         .then(updatedPerson => {
             response.res.json(updatedPerson)
         })
@@ -99,6 +103,9 @@ const errorHandler = (error, request, response, next) => {
 
     if (error.name === 'CastError') {
         return response.status(400).send({ error: 'malformatted id' })
+    }
+    else if (error.name === 'ValidationError') {
+        return response.status(400).send({ error: error.message})
     }
 
     next(error)

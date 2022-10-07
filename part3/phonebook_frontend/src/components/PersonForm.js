@@ -17,8 +17,7 @@ const PersonForm = ({newName, setNewName,
             if (window.confirm(`${newName} is already added to the phonebook` +
                                ', replace the old number with a new one?')) {
                 let updatePerson = persons.find(person => person.name === newName)
-                updatePerson.number = newNumber
-                personsServer.updateNumber(updatePerson)
+                personsServer.updateNumber({...updatePerson, number: newNumber})
                     .then(updatedPerson => {
                         let newPersons = [...persons]
                         let changedIndex = newPersons.findIndex(person => (
@@ -34,7 +33,8 @@ const PersonForm = ({newName, setNewName,
                         setTimeout(() => setMessage(''), 5000)
                     })
                     .catch(error => {
-                        setMessage(`Error: ${updatePerson.name} has already been deleted`)
+                        setMessage('Error: ' + error.response.data.error)
+                        console.log(error.response.data.error)
                         setTimeout(() => setMessage(''), 5000)
                     })
             }
@@ -47,6 +47,11 @@ const PersonForm = ({newName, setNewName,
                 setNewName('')
                 setNewNumber('')
                 setMessage(`Added ${person.name}`)
+                setTimeout(() => setMessage(''), 5000)
+            })
+            .catch(error => {
+                setMessage('Error: ' + error.response.data.error)
+                console.log(error.response.data.error)
                 setTimeout(() => setMessage(''), 5000)
             })
         }

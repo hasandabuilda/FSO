@@ -11,10 +11,39 @@ mongoose.connect(url)
     .catch((error) => {
         console.log('error connecting to MongoDB', error.message)
     })
+    
+function validateNumber(num) {
+    const numberParts = num.split('-')
+
+    if (numberParts.length !== 2) {
+        return false
+    }
+    else {
+        let firstPart = numberParts[0]
+        let secondPart = numberParts[1]
+
+        if ((firstPart.length !== 2) && (firstPart.length !== 3)) {
+            return false
+        }
+        else if (!Number(firstPart) || !Number(secondPart)) {
+            return false
+        }
+        else {
+            return true
+        }
+    }
+}
 
 const personSchema = new mongoose.Schema({
-    name: String,
-    number: String,
+    name: {
+        type: String,
+        minLength: 3,
+    },
+    number: {
+        type: String,
+        minLength: 8,
+        validate: validateNumber,
+    },
 })
 
 personSchema.set('toJSON', {
